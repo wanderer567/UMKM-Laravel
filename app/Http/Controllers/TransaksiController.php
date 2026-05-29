@@ -13,11 +13,19 @@ use Illuminate\Support\Facades\Auth;
 class TransaksiController extends Controller
 {
     public function index()
-    {
+{
+   
+    try {
+        $transaksi = Transaksi::with('pelanggan')
+                              ->orderBy('id_transaksi', 'desc') 
+                              ->get();
+    } catch (\Exception $e) {
+        // Fallback jika kolom id_transaksi tidak ditemukan, urutkan berdasarkan tanggal
         $transaksi = Transaksi::with('pelanggan')->orderBy('tanggal', 'desc')->get();
-        
-        return view('admin.transaksi.index', compact('transaksi'));
     }
+    
+    return view('admin.transaksi.index', compact('transaksi'));
+}
 
     public function show($id)
     {
@@ -112,6 +120,7 @@ class TransaksiController extends Controller
                 'tanggal' => now()->toDateString(),
                 'total_harga' => $totalHarga,
                 'pesan' => $request->pesan ?? null,
+                'status' => 'pending',
                 'metode_pembayaran' => $request->metode_pembayaran,
                 'metode_pengiriman' => 'Online (Digital)',
                 'data_tujuan' => $request->data_tujuan
@@ -145,9 +154,23 @@ class TransaksiController extends Controller
 
         } catch (\Exception $e) {
             DB::rollback();
-            return redirect()->back()->with('error', 'Gagal memproses transaksi: ' . $e->getMessage());
+            return redirect()->route('transaksi.history')->with('error', 'Gagal memproses transaksi: ' . $e->getMessage());
         }
     }
+
+    public function konfirmasiTransaksi($id)
+{
+    $transaksi = Transaksi::where('id_transaksi', $id)->first();
+    
+    if (!$transaksi) {
+        $transaksi = Transaksi::findOrFail($id);
+    }
+
+    $transaksi->status = 'sukses';
+    $transaksi->save();
+
+    return redirect()->back()->with('success', 'Status transaksi berhasil diperbarui menjadi Sukses!');
+}
 
     public function history()
     {

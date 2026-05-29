@@ -165,8 +165,8 @@
 </head>
 <body>
     
-<div class="hero-banner-container">
-    <img src="{{ asset('storage/carousel/carousel.png') }}" class="bg-banner-main" alt="Hero Banner Background">
+<div class="hero-banner-container" style="overflow: hidden;"> 
+    <img src="{{ asset('storage/carousel/carousel.png') }}" class="bg-banner-main" alt="Hero Banner Background" style="filter: blur(8px); transform: scale(1.0);">
     <div class="carousel-overlay-wrapper">
         <div id="carouselExampleIndicators" class="carousel slide carousel-custom" data-bs-ride="carousel">
             <div class="carousel-indicators">

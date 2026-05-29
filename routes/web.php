@@ -101,6 +101,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
     // bagiann transaksii di admn
     Route::get('/admin/transaksi', [TransaksiController::class, 'index'])->name('transaksi.index');
     Route::get('/admin/transaksi/{id}', [TransaksiController::class, 'show'])->name('transaksi.show');
+    Route::post('/admin/transaksi/{id}/konfirmasi', [TransaksiController::class, 'konfirmasiTransaksi'])->name('transaksi.konfirmasi');
     Route::delete('/admin/transaksi/{id}', [TransaksiController::class, 'destroy'])->name('transaksi.destroy');
 
     // chattttt adminn

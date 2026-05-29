@@ -18,54 +18,72 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @forelse($transaksi as $t)
-                    <tr>
-                        <td class="ps-4 fw-bold">#TRX-{{ $t->id_transaksi }}</td>
-                        <td>{{ $t->pelanggan->nama }}</td>
-                        <td>{{ date('d M Y', strtotime($t->tanggal)) }}</td>
-                        <td>
-                            @if($t->pelanggan->is_vip)
-                                <small class="text-muted text-decoration-line-through">
-                                    Rp {{ number_format($t->total_harga / 0.7, 0, ',', '.') }}
-                                </small>
-                                <br>
-                                <span class="text-success fw-bold">
-                                    Rp {{ number_format($t->total_harga, 0, ',', '.') }} 
-                                    <span class="badge bg-warning text-dark" style="font-size: 0.7rem;">Disc 30%</span>
-                                </span>
-                            @else
-                                <span class="fw-bold text-dark">
-                                    Rp {{ number_format($t->total_harga, 0, ',', '.') }}
-                                </span>
-                            @endif
-                        </td>
-                        <td>
-                            <span class="badge bg-success rounded-pill px-3">Selesai</span>
-                        </td>
-                        
-                        <td class="text-center">
-                            <div class="d-flex justify-content-center gap-2">
-                                <a href="{{ route('transaksi.show', $t->id_transaksi) }}" class="btn btn-sm btn-info text-white rounded-pill px-3">
-                                    <i class="bi bi-eye"></i>
-                                </a>
+    @forelse($transaksi as $t)
+    <tr>
+        <td class="ps-4 fw-bold">#TRX-{{ $t->id_transaksi }}</td>
+        <td>{{ $t->pelanggan->nama }}</td>
+        <td>{{ date('d M Y', strtotime($t->tanggal)) }}</td>
+        <td>
+            @if($t->pelanggan->is_vip)
+                <small class="text-muted text-decoration-line-through">
+                    Rp {{ number_format($t->total_harga / 0.7, 0, ',', '.') }}
+                </small>
+                <br>
+                <span class="text-success fw-bold">
+                    Rp {{ number_format($t->total_harga, 0, ',', '.') }} 
+                    <span class="badge bg-warning text-dark" style="font-size: 0.7rem;">Disc 30%</span>
+                </span>
+            @else
+                <span class="fw-bold text-dark">
+                    Rp {{ number_format($t->total_harga, 0, ',', '.') }}
+                </span>
+            @endif
+        </td>
+        <td>
+            {{-- FIX BUG: Mengubah $item menjadi $t agar tidak eror --}}
+            @if($t->status === 'pending')
+                <span class="badge bg-warning text-dark px-3 py-2 rounded-pill fw-semibold">Pending</span>
+            @elseif($t->status === 'sukses' || $t->status === 'berhasil')
+                <span class="badge bg-success px-3 py-2 rounded-pill fw-semibold">Selesai</span>
+            @else
+                <span class="badge bg-danger px-3 py-2 rounded-pill fw-semibold">Gagal</span>
+            @endif
+        </td>
+        
+        <td class="text-center">
+            <div class="d-flex justify-content-center gap-2">
+                {{-- 1. TOMBOL KONFIRMASI (Hanya muncul jika statusnya masih pending) --}}
+                @if($t->status === 'pending')
+                    <form action="{{ route('transaksi.konfirmasi', $t->id_transaksi) }}" method="POST" class="d-inline">
+                        @csrf
+                        <button type="submit" class="btn btn-sm btn-success rounded-pill px-3" onclick="return confirm('Apakah kamu yakin uang transferan untuk transaksi ini sudah masuk?')">
+                            <i class="bi bi-check-lg"></i> Konfirmasi
+                        </button>
+                    </form>
+                @endif
 
-                                <!-- Tombol Hapus dengan ID unik untuk Form -->
-                                <form id="delete-form-{{ $t->id_transaksi }}" action="{{ route('transaksi.destroy', $t->id_transaksi) }}" method="POST" class="d-inline">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="button" class="btn btn-sm btn-danger rounded-pill px-3" onclick="confirmDelete('{{ $t->id_transaksi }}')">
-                                        <i class="bi bi-trash"></i>
-                                    </button>
-                                </form>
-                            </div>
-                        </td>
-                    </tr>
-                    @empty
-                    <tr>
-                        <td colspan="6" class="text-center py-5 text-muted">Belum ada riwayat transaksi.</td>
-                    </tr>
-                    @endforelse
-                </tbody>
+         
+                <a href="{{ route('transaksi.show', $t->id_transaksi) }}" class="btn btn-sm btn-info text-white rounded-pill px-3">
+                    <i class="bi bi-eye"></i>
+                </a>
+
+           
+                <form id="delete-form-{{ $t->id_transaksi }}" action="{{ route('transaksi.destroy', $t->id_transaksi) }}" method="POST" class="d-inline">
+                    @csrf
+                    @method('DELETE')
+                    <button type="button" class="btn btn-sm btn-danger rounded-pill px-3" onclick="confirmDelete('{{ $t->id_transaksi }}')">
+                        <i class="bi bi-trash"></i>
+                    </button>
+                </form>
+            </div>
+        </td>
+    </tr>
+    @empty
+    <tr>
+        <td colspan="6" class="text-center py-5 text-muted">Belum ada riwayat transaksi.</td>
+    </tr>
+    @endforelse
+</tbody>
             </table>
         </div>
     </div>

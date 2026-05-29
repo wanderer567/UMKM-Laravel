@@ -18,11 +18,25 @@
                 <h3 class="fw-bold text-primary">#INV-{{ $transaksi->id_transaksi }}-{{ date('Ymd', strtotime($transaksi->tanggal)) }}</h3>
             </div>
             <div class="col-sm-6 text-sm-end mt-3 mt-sm-0">
-                <h5 class="fw-bold text-dark mb-1">Status Pembayaran:</h5>
-                <span class="badge bg-warning text-dark px-3 py-2 rounded-pill fw-semibold">
-                    Menunggu Pembayaran ({{ strtoupper($transaksi->metode_pembayaran) }})
-                </span>
-            </div>
+    <h5 class="fw-bold text-dark mb-1">Status Pembayaran:</h5>
+    
+    @if($transaksi->status === 'sukses')
+        {{-- Tampilan kalau Admin sudah konfirmasi pembayaran --}}
+        <span class="badge bg-success text-white px-3 py-2 rounded-pill fw-semibold">
+            <i class="bi bi-check-circle-fill me-1"></i> Pembayaran Sukses ({{ strtoupper($transaksi->metode_pembayaran) }})
+        </span>
+    @elseif($transaksi->status === 'gagal')
+        {{-- Tampilan kalau transaksi dibatalkan atau gagal --}}
+        <span class="badge bg-danger text-white px-3 py-2 rounded-pill fw-semibold">
+            <i class="bi bi-x-circle-fill me-1"></i> Pembayaran Gagal
+        </span>
+    @else
+        {{-- Tampilan bawaan saat baru checkout (status: pending) --}}
+        <span class="badge bg-warning text-dark px-3 py-2 rounded-pill fw-semibold">
+            <i class="bi bi-hourglass-split me-1"></i> Menunggu Pembayaran ({{ strtoupper($transaksi->metode_pembayaran) }})
+        </span>
+    @endif
+</div>
         </div>
 
         <hr class="text-muted opacity-25 my-4">

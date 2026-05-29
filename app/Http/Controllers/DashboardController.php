@@ -68,4 +68,18 @@ class DashboardController extends Controller
         'aktivitasTerakhir'
     ));
 }
+
+        // Tambahkan fungsi ini di dalam DashboardController.php
+        public function konfirmasiTransaksi($id)
+        {
+            // Cari data transaksi berdasarkan ID
+            $transaksi = Transaksi::findOrFail($id);
+            
+            // Ubah statusnya menjadi berhasil (atau 'sukses' sesuai string di migration-mu)
+            $transaksi->status = 'sukses';
+            $transaksi->save();
+
+            // Kembalikan ke halaman sebelumnya dengan pesan sukses
+            return redirect()->back()->with('success', 'Transaksi #' . $transaksi->id_transaksi . ' berhasil dikonfirmasi!');
+        }
 }

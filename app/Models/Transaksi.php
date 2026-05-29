@@ -12,7 +12,7 @@ class Transaksi extends Model
     protected $table = 'tb_transaksi';
     protected $primaryKey = 'id_transaksi';
     
-    protected $fillable = ['id_pelanggan', 'tanggal', 'total_harga', 'pesan', 'metode_pembayaran', 'metode_pengiriman', 'data_tujuan'];
+    protected $fillable = ['id_pelanggan', 'tanggal', 'total_harga', 'pesan', 'status', 'metode_pembayaran', 'metode_pengiriman', 'data_tujuan'];
 
     
     public function pelanggan()

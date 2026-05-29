@@ -135,7 +135,7 @@
                     </table>
                 </div>
 
-                <!-- Bagian Pesan Pembeli -->
+                <!-- Bagian Pesan Pembeli
                 <div class="mt-4 p-3 bg-light rounded-3 border-start border-4 border-primary">
                     <h6 class="fw-bold mb-2 small text-uppercase text-muted">Pesan dari Pembeli:</h6>
                     <p class="mb-0 italic">"{{ $pesanPembeli ?? 'Tidak ada pesan khusus.' }}"</p>
@@ -145,7 +145,7 @@
     </div>
 </div>
 <!-- Bagian Pesan Pembeli di show.blade.php -->
-<div class="mt-4 p-3 bg-light rounded-3 border-start border-4 border-primary">
+<!-- <div class="mt-4 p-3 bg-light rounded-3 border-start border-4 border-primary">
     <h6 class="fw-bold mb-2 small text-uppercase text-muted">Pesan dari Pembeli:</h6>
     <p class="mb-0">
         @if($transaksi->pesan)
@@ -154,7 +154,7 @@
             <span class="text-muted italic">Tidak ada pesan khusus dari pelanggan.</span>
         @endif
     </p>
-</div>
+</div> --> 
     </div>
 </div>
 @endsection
